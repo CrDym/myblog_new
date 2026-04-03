@@ -1,43 +1,53 @@
-# Astro Starter Kit: Minimal
+# 个人博客
 
-```sh
-npm create astro@latest -- --template minimal
+一个简洁的个人博客，基于 [Astro](https://astro.build) 构建。
+
+## 特性
+
+- 简洁设计，专注于内容
+- 深色模式切换
+- Markdown 写作
+- 标签分类
+- 自动部署到 GitHub Pages
+
+## 快速开始
+
+```bash
+# 安装依赖
+npm install
+
+# 启动开发服务器
+npm run dev
+
+# 构建生产版本
+npm run build
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
+## 项目结构
 
 ```text
 /
-├── public/
+├── public/              # 静态资源
 ├── src/
-│   └── pages/
-│       └── index.astro
+│   ├── content/posts/   # Markdown 文章
+│   ├── layouts/         # 布局组件
+│   ├── pages/           # 页面
+│   └── styles/          # 全局样式
+├── astro.config.mjs     # Astro 配置
 └── package.json
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## 部署
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+推送到 `main` 分支后，GitHub Actions 会自动构建并部署到 GitHub Pages。
 
-Any static assets, like images, can be placed in the `public/` directory.
+博客地址：https://crdym.github.io/myblog_new/
 
-## 🧞 Commands
+## 命令
 
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+| 命令          | 说明                              |
+| :------------ | :-------------------------------- |
+| `npm install` | 安装依赖                          |
+| `npm run dev` | 启动开发服务器 `localhost:4321`   |
+| `npm run build` | 构建生产版本到 `./dist/`        |
+| `npm run preview` | 本地预览构建结果              |
