@@ -21,9 +21,8 @@ const currentIndex = allPosts.findIndex(p => p.slug === post.slug);
 const prevPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null;
 const nextPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
 
-const renderedContent = await post.render();
-const textContent = renderedContent.body.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
-const readingTime = Math.max(1, Math.ceil(textContent.split(/\s+/).length / 200));
+const words = post.body.trim().split(/\s+/).length;
+const readingTime = Math.max(1, Math.ceil(words / 200));
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description || ''}>
