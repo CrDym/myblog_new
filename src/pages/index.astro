@@ -8,9 +8,25 @@ const posts = (await getCollection('posts'))
 ---
 
 <BaseLayout title="My Blog" description="A minimal blog">
+  <section class="hero">
+    <div class="hero-avatar"></div>
+    <h1 class="hero-title">你好，我是 CrDym</h1>
+    <p class="hero-desc">热爱技术与分享，记录学习心得与生活感悟。</p>
+    <div class="hero-links">
+      <a href="https://github.com/CrDym" target="_blank" rel="noopener">GitHub</a>
+      <span class="separator">·</span>
+      <a href="mailto:your@email.com">Email</a>
+    </div>
+  </section>
+  <h2 class="section-title">最新文章</h2>
   <ul class="post-list">
     {posts.map(post => (
       <li class="post-item">
+        {post.data.cover && (
+          <a href={`/posts/${post.slug}`} class="post-cover-link">
+            <img src={post.data.cover} alt={post.data.title} class="post-cover" loading="lazy" />
+          </a>
+        )}
         <h2 class="post-title">
           <a href={`/posts/${post.slug}`}>{post.data.title}</a>
         </h2>

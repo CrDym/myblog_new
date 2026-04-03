@@ -28,6 +28,9 @@ const { Content } = await post.render();
           ))}
         </div>
       )}
+      {post.data.cover && (
+        <img src={post.data.cover} alt={post.data.title} class="post-cover-large" loading="lazy" />
+      )}
     </header>
     <div class="post-content">
       <Content />

@@ -3,6 +3,7 @@ title: "Hello World"
 description: "这是我的第一篇博客文章"
 date: 2026-04-03
 tags: ["随笔", "博客"]
+cover: "/images/hello-world-cover.svg"
 ---
 
 欢迎来到我的博客！

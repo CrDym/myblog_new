@@ -19,7 +19,7 @@ const { title, description = 'A minimal blog' } = Astro.props;
     <title>{title}</title>
   </head>
   <body>
-    <header class="site-header">
+    <header class="site-header" style="view-transition-name: header">
       <div class="container">
         <a href="/" class="site-title">My Blog</a>
         <nav class="nav-links">
@@ -31,10 +31,10 @@ const { title, description = 'A minimal blog' } = Astro.props;
         </nav>
       </div>
     </header>
-    <main class="container">
+    <main class="container" style="view-transition-name: main">
       <slot />
     </main>
-    <footer class="site-footer">
+    <footer class="site-footer" style="view-transition-name: footer">
       <div class="container">
         <p>&copy; {new Date().getFullYear()} My Blog. All rights reserved.</p>
       </div>
@@ -54,5 +54,18 @@ const { title, description = 'A minimal blog' } = Astro.props;
         toggle.innerHTML = isDark ? '&#9680;' : '&#9788;';
       });
     </script>
+    <style is:global>
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      ::view-transition-old(main) {
+        animation: none;
+        opacity: 0;
+      }
+      ::view-transition-new(main) {
+        animation: fadeIn 0.3s ease;
+      }
+    </style>
   </body>
 </html>
