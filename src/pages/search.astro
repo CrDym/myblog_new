@@ -1,0 +1,54 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('posts'))
+  .filter(post => !post.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const searchData = posts.map(post => ({
+  title: post.data.title,
+  description: post.data.description || '',
+  date: post.data.date.toISOString(),
+  tags: post.data.tags,
+  url: `/posts/${post.slug}`,
+}));
+---
+
+<BaseLayout title="搜索" description="搜索文章">
+  <h1 class="search-title">搜索文章</h1>
+  <input type="text" class="search-input" id="searchInput" placeholder="输入关键词搜索..." />
+  <ul class="search-results" id="searchResults"></ul>
+  <script define:vars={{ searchData }}>
+    const input = document.getElementById('searchInput');
+    const results = document.getElementById('searchResults');
+
+    function renderResults(items) {
+      if (items.length === 0) {
+        results.innerHTML = '<li class="search-empty">没有找到相关文章</li>';
+        return;
+      }
+      results.innerHTML = items.map(post => `
+        <li class="post-item">
+          <h2 class="post-title"><a href="${post.url}">${post.title}</a></h2>
+          <div class="post-meta">${new Date(post.date).toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+          ${post.description ? `<p class="post-description">${post.description}</p>` : ''}
+        </li>
+      `).join('');
+    }
+
+    input.addEventListener('input', () => {
+      const query = input.value.toLowerCase().trim();
+      if (!query) {
+        results.innerHTML = '';
+        return;
+      }
+      const filtered = searchData.filter(post =>
+        post.title.toLowerCase().includes(query) ||
+        post.description.toLowerCase().includes(query) ||
+        post.tags.some(t => t.toLowerCase().includes(query))
+      );
+      renderResults(filtered);
+    });
+  </script>
+</BaseLayout>

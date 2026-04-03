@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('posts'))
+  .filter(post => !post.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const grouped = {};
+posts.forEach(post => {
+  const year = post.data.date.getFullYear();
+  const month = post.data.date.getMonth() + 1;
+  const key = `${year}-${String(month).padStart(2, '0')}`;
+  if (!grouped[key]) grouped[key] = [];
+  grouped[key].push(post);
+});
+---
+
+<BaseLayout title="归档" description="文章归档">
+  <h1 class="archive-title">文章归档</h1>
+  {Object.entries(grouped).map(([key, posts]) => {
+    const [year, month] = key.split('-');
+    return (
+      <div class="archive-month">
+        <div class="archive-month-label">{year} 年 {parseInt(month)} 月</div>
+        <ul class="archive-list">
+          {posts.map(post => (
+            <li class="archive-item">
+              <a href={`/posts/${post.slug}`}>{post.data.title}</a>
+              <span class="archive-date">{post.data.date.toLocaleDateString('zh-CN', { month: 'numeric', day: 'numeric' })}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  })}
+</BaseLayout>

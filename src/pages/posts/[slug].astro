@@ -12,6 +12,18 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await post.render();
+
+const allPosts = (await getCollection('posts'))
+  .filter(p => !p.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const currentIndex = allPosts.findIndex(p => p.slug === post.slug);
+const prevPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null;
+const nextPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
+
+const renderedContent = await post.render();
+const textContent = renderedContent.body.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+const readingTime = Math.max(1, Math.ceil(textContent.split(/\s+/).length / 200));
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description || ''}>
@@ -19,7 +31,9 @@ const { Content } = await post.render();
     <header class="post-header">
       <h1>{post.data.title}</h1>
       <div class="post-meta">
-        {post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
+        <span>{post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+        <span class="meta-separator">·</span>
+        <span>约 {readingTime} 分钟阅读</span>
       </div>
       {post.data.tags.length > 0 && (
         <div class="post-tags">
@@ -36,4 +50,20 @@ const { Content } = await post.render();
       <Content />
     </div>
   </article>
+  {(prevPost || nextPost) && (
+    <nav class="post-nav">
+      {prevPost && (
+        <a href={`/posts/${prevPost.slug}`} class="post-nav-item post-nav-prev">
+          <span class="post-nav-label">上一篇</span>
+          <span class="post-nav-title">{prevPost.data.title}</span>
+        </a>
+      )}
+      {nextPost && (
+        <a href={`/posts/${nextPost.slug}`} class="post-nav-item post-nav-next">
+          <span class="post-nav-label">下一篇</span>
+          <span class="post-nav-title">{nextPost.data.title}</span>
+        </a>
+      )}
+    </nav>
+  )}
 </BaseLayout>
